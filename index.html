@@ -1,0 +1,232 @@
+<html><head><base href="." />
+<style>
+:root {
+  --primary: #EA4335;
+  --hover: #d32f2f;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20px;
+}
+
+.logo {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 72px;
+  font-weight: bold;
+  color: #EA4335;
+  font-family: Arial, sans-serif;
+  margin-left: 10px;
+  letter-spacing: -2px;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 584px;
+}
+
+.search-input {
+  width: 100%;
+  height: 44px;
+  padding: 10px 50px 10px 20px;
+  font-size: 16px;
+  border: 1px solid #dfe1e5;
+  border-radius: 24px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.search-input:hover {
+  box-shadow: 0 1px 6px rgba(234,67,53,0.28);
+  border-color: rgba(223,225,229,0);
+}
+
+.search-input:focus {
+  box-shadow: 0 1px 6px rgba(234,67,53,0.28);
+  border-color: rgba(223,225,229,0);
+}
+
+.search-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.search-button svg {
+  fill: var(--primary);
+  transition: fill 0.2s;
+}
+
+.search-button:hover svg {
+  fill: var(--hover);
+}
+
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.action-button {
+  background: #fee7e5;
+  border: 1px solid #fee7e5;
+  border-radius: 4px;
+  color: #EA4335;
+  font-size: 14px;
+  padding: 0 16px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background-color: #fdd9d7;
+  border: 1px solid #EA4335;
+  color: #d32f2f;
+}
+
+.results {
+  display: none;
+  padding: 20px;
+  max-width: 652px;
+  margin: 0 auto;
+}
+
+.result-item {
+  margin-bottom: 30px;
+}
+
+.result-title {
+  color: #EA4335;
+  font-size: 20px;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.result-url {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.result-description {
+  color: #4d5156;
+  font-size: 14px;
+  line-height: 1.58;
+}
+</style>
+</head>
+<body>
+
+<div class="search-container">
+  <div class="logo">
+    <div class="logo-text">GOOGUS</div>
+  </div>
+  
+  <div class="search-box">
+    <input type="text" class="search-input" placeholder="Search Googus..." aria-label="Search">
+    <button class="search-button" aria-label="Search">
+      <svg height="24px" width="24px" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="buttons">
+    <button class="action-button">Search</button>
+    <button class="action-button">I'm Feeling Like Googus</button>
+  </div>
+</div>
+
+<div class="results">
+  <!-- Search results will be dynamically inserted here -->
+</div>
+
+<script>
+const searchInput = document.querySelector('.search-input');
+const searchButton = document.querySelector('.search-button');
+const resultsContainer = document.querySelector('.results');
+const searchContainer = document.querySelector('.search-container');
+
+// Sample search results data
+const sampleResults = [
+  {
+    title: "Example Search Result 1",
+    url: "https://example.com/result1",
+    description: "This is a sample search result description that shows what the page is about and why it might be relevant to your search query."
+  },
+  {
+    title: "Example Search Result 2",
+    url: "https://example.com/result2",
+    description: "Another example search result with details about the page content and its relevance to what you're looking for."
+  },
+  {
+    title: "Example Search Result 3",
+    url: "https://example.com/result3",
+    description: "A third sample result demonstrating how search results appear in the layout with title, URL, and description."
+  }
+];
+
+function performSearch() {
+  const query = searchInput.value.trim();
+  
+  if (query.length === 0) return;
+  
+  // Clear previous results
+  resultsContainer.innerHTML = '';
+  
+  // Show results container
+  resultsContainer.style.display = 'block';
+  searchContainer.style.paddingTop = '20px';
+  
+  // Create and append search results
+  sampleResults.forEach(result => {
+    const resultElement = document.createElement('div');
+    resultElement.className = 'result-item';
+    resultElement.innerHTML = `
+      <a href="${result.url}" class="result-title">${result.title}</a>
+      <div class="result-url">${result.url}</div>
+      <div class="result-description">${result.description}</div>
+    `;
+    resultsContainer.appendChild(resultElement);
+  });
+}
+
+// Event listeners
+searchButton.addEventListener('click', performSearch);
+searchInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    performSearch();
+  }
+});
+
+// Focus search input on page load
+searchInput.focus();
+</script>
+
+</body></html>
